@@ -63,4 +63,14 @@ export class StoresService {
   }
     return this.prisma.stores.delete({ where: { id } });
   }
+
+  async findProductsByStore(storeId: number) {
+  return this.prisma.products.findMany({
+    where: { store_id: storeId },
+    include: {
+      product_images: true, 
+      category: true,       
+    },
+  });
+}
 }

@@ -6,7 +6,7 @@ import { IsPublic } from 'src/auth/decorators/is-public.decorator';
 import { CurrentUser } from 'src/auth/decorators/curretn-user.decorator';
 import { User } from './entity/user.entity';
 
-@Controller()
+@Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -44,5 +44,16 @@ export class UserController {
     return this.userService.findOne(id);
   }
 
+  @IsPublic()
+  @Get(':id/stores')
+  findStoresByUser(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.findStoresByUser(id);
+  }
+
+  @IsPublic()
+  @Get(':id/products')
+  findProductsByUser(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.findProductsByUser(id);
+  }
 
 }
