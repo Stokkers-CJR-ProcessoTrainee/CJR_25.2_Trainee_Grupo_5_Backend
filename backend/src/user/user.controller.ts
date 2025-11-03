@@ -5,6 +5,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { IsPublic } from 'src/auth/decorators/is-public.decorator';
 import { CurrentUser } from 'src/auth/decorators/curretn-user.decorator';
 import { User } from './entity/user.entity';
+import { UpdatePassDto } from './dto/update-pasword.dto';
 
 @Controller('user')
 export class UserController {
@@ -31,6 +32,14 @@ export class UserController {
     @CurrentUser() user: User,
     @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(user.id, updateUserDto);
+  }
+
+  @Patch('update-pass')
+  updateMyPass(
+    @CurrentUser() user: User,
+    @Body() updatePassDto: UpdatePassDto) {
+    const { currentPassword, newPassword } = updatePassDto;
+    return this.userService.updatePass(user.id, currentPassword, newPassword);
   }
 
   @Delete('delete')
