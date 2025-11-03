@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, ParseIntPipe } from '@nestjs/common';
 import { StoresService } from './stores.service';
 import { CreateStoreDto, UpdateStoreDto } from './stores.dto';
 import { IsPublic } from 'src/auth/decorators/is-public.decorator';
@@ -46,4 +46,11 @@ export class StoresController {
   ) {
     return this.storesService.remove(Number(id), user.id);
   }
+
+  @IsPublic()
+  @Get(':id/products')
+  findProductsByStore(@Param('id', ParseIntPipe) id: number) {
+    return this.storesService.findProductsByStore(id);
+  }
+
 }

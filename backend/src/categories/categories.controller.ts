@@ -9,6 +9,7 @@ export class CategoriesController {
 
     constructor(private readonly categoriesService: CategoriesService) {}
 
+    @IsPublic()
     @Post()
     create(@Body() data: CreateCategoriesDto){
         return this.categoriesService.create(data);

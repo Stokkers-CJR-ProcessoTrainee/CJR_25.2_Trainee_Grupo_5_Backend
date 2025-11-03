@@ -88,4 +88,30 @@ export class UserService {
     });
     return userToDelete
   }
+
+  async findStoresByUser(userId: number) {
+    return this.prisma.stores.findMany({
+      where: { user_id: userId },
+      include: {
+        products: true,
+      },
+    });
+  }
+
+  async findProductsByUser(userId: number) {
+    return this.prisma.products.findMany({
+      where: {
+        store: {
+          user_id: userId,
+        },
+      },
+      include: {
+        product_images: true,
+        store: true,
+      },
+    });
+  }
+
 }
+
+  

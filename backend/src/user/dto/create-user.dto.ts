@@ -1,8 +1,8 @@
-import { IsEmail, IsString, Matches, MaxLength, MinLength } from "class-validator";
+import { IsEmail, IsString, IsUrl, Matches, MaxLength, MinLength } from "class-validator";
 
 export class CreateUserDto  {
 
-    @IsEmail()
+    @IsEmail({}, { message: 'Insira um endereço de e‑mail válido.' })
     email: string;
 
     @IsString()
@@ -19,5 +19,8 @@ export class CreateUserDto  {
     @IsString()
     name: string;
 
+    @IsString()
+    @IsUrl()
+    profile_picture_url: string;
 }
 

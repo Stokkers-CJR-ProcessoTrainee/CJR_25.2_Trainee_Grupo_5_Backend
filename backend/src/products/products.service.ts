@@ -35,7 +35,7 @@ export class ProductsService {
 
     }
 
-    async findAll(storeId: number) {
+    async findAllByStore(storeId: number) {
         const store = await this.prisma.stores.findUnique ({
             where: { id: storeId }
         })
@@ -50,6 +50,23 @@ export class ProductsService {
             }
         });
     }
+
+    async findAllByCategory(categoryId: number) {
+        const category = await this.prisma.categories.findUnique ({
+            where: { id: categoryId }
+        })
+
+        if (!category) {
+            throw new NotFoundException("Categoria não encontrada")
+        }
+
+        return this.prisma.products.findMany({  
+            where: {
+                category_id: categoryId,
+            }
+        });
+    }
+
 
     async findOne(id: number) {
         const product = await this.prisma.products.findUnique({

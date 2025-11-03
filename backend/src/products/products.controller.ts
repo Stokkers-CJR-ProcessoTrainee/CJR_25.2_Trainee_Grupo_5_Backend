@@ -24,12 +24,20 @@ export class ProductsController {
 
     @IsPublic()
     @Get('store/:storeId')
-    findAll(
+    findAllByStore(
         @Param('storeId', ParseIntPipe) storeId: number
     ){
-        return this.productsService.findAll(storeId);
+        return this.productsService.findAllByStore(storeId);
     }
 
+    @IsPublic()
+    @Get('category/:categoryId')
+    findAllByCategory(
+        @Param('categoryId', ParseIntPipe) categoryId: number
+    ){
+        return this.productsService.findAllByCategory(categoryId);
+    }
+    
     @IsPublic()
     @Get(':id')
     findOne(@Param('id', ParseIntPipe) id: number){

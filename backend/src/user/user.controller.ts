@@ -10,10 +10,8 @@ import { User } from './entity/user.entity';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  //Vou deixar esse endpoint público para que vocês possam criar novos usuários sem passar pela validação
-  //Mas depois de criar, por favor, remova esse decorator (IsPublic) para que o endpoint volte a ser protegido
   @IsPublic() 
-  @Post()
+  @Post('register')
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
@@ -47,5 +45,16 @@ export class UserController {
     return this.userService.findOne(id);
   }
 
+  @IsPublic()
+  @Get(':id/stores')
+  findStoresByUser(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.findStoresByUser(id);
+  }
+
+  @IsPublic()
+  @Get(':id/products')
+  findProductsByUser(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.findProductsByUser(id);
+  }
 
 }
