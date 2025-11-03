@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from 'src/database/prisma.service';
@@ -80,6 +80,35 @@ export class UserService {
       password_hash: undefined,
     };
   }
+
+async updatePass(id: number, currentPassword: string, newPassword: string) {
+  const user = await this.prisma.users.findUnique({ where: { id } });
+
+  if (!user) {
+    throw new NotFoundException('Usuário não encontrado');
+  }
+
+  const isMatch = await bcrypt.compare(currentPassword, user.password_hash);
+  if (!isMatch) {
+    throw new UnauthorizedException('Senha atual incorreta');
+  }
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+  const updatedUser = await this.prisma.users.update({
+    where: { id },
+    data: {
+      password_hash: hashedPassword,
+    },
+  });
+
+  return {
+    ...updatedUser,
+    password_hash: undefined,
+  };
+}
+
+  
 
   async remove(id: number) {
     const userToDelete = await this.findOne(id);
