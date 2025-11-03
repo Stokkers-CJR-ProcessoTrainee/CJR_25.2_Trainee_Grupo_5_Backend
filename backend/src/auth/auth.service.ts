@@ -25,11 +25,9 @@ export class AuthService {
         };
 
         const jwttoken = this.jwtService.sign(payload);
-        const userId = payload.sub;
 
         return {
             token: jwttoken,
-            userId: userId,
         };
     }
 

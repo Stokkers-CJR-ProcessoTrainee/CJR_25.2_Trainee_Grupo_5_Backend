@@ -26,7 +26,6 @@ export class UserController {
     return this.userService.findOne(user.id);
   }
 
-  @IsPublic()
   @Patch('me')
   updateMyProfile(
     @CurrentUser() user: User,
