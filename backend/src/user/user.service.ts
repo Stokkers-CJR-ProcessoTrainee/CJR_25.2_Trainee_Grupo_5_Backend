@@ -112,6 +112,28 @@ export class UserService {
     });
   }
 
-}
+  async findRatingsByUser(userId: number) {
+  const user = await this.prisma.users.findUnique({
+    where: { id: userId },
+    include: {
+      store_ratings: {
+        include: { store: true },
+      },
+      product_ratings: {
+        include: { product: true },
+      },
+    },
+  });
 
+  if (!user) {
+    throw new NotFoundException('Usuário não encontrado');
+  }
+
+  return {
+    store_ratings: user.store_ratings,
+    product_ratings: user.product_ratings,
+    };
+  }
+
+}
   
