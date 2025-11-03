@@ -33,7 +33,7 @@ export class UserController {
     return this.userService.update(user.id, updateUserDto);
   }
 
-  @Delete('me')
+  @Delete('delete')
   remove(@CurrentUser() user: User) {
     return this.userService.remove(user.id);
   }
