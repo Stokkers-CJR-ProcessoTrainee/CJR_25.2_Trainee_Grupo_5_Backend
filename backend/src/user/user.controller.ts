@@ -26,7 +26,7 @@ export class UserController {
     return this.userService.findOne(user.id);
   }
 
-  @Patch('me')
+  @Patch('update')
   updateMyProfile(
     @CurrentUser() user: User,
     @Body() updateUserDto: UpdateUserDto) {
