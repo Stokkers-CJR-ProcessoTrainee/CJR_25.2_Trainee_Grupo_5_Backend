@@ -16,7 +16,6 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
-  @IsPublic() 
   @Get()
   findAll() {
     return this.userService.findAll();
@@ -27,6 +26,7 @@ export class UserController {
     return this.userService.findOne(user.id);
   }
 
+  @IsPublic()
   @Patch('me')
   updateMyProfile(
     @CurrentUser() user: User,
