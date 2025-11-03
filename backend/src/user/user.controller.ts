@@ -44,5 +44,16 @@ export class UserController {
     return this.userService.findOne(id);
   }
 
+  @IsPublic()
+  @Get(':id/stores')
+  findStoresByUser(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.findStoresByUser(id);
+  }
+
+  @IsPublic()
+  @Get(':id/products')
+  findProductsByUser(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.findProductsByUser(id);
+  }
 
 }
