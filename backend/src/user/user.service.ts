@@ -59,15 +59,15 @@ export class UserService {
     };
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async update(id: number, data: any) {
     await this.findOne(id)
 
     const dataToUpdate = {
-      ...updateUserDto 
+      ...data 
     };
 
-    if (updateUserDto.password_hash){
-      dataToUpdate.password_hash = await bcrypt.hash(updateUserDto.password_hash, 10)
+    if (data.password_hash){
+      dataToUpdate.password_hash = await bcrypt.hash(data.password_hash, 10)
     };
 
     const updatedUser = await this.prisma.users.update({

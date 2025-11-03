@@ -16,6 +16,7 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
+  @IsPublic() 
   @Get()
   findAll() {
     return this.userService.findAll();

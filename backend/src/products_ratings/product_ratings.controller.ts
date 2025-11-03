@@ -2,7 +2,6 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Put } 
 import { ProductRatingsService } from './product_ratings.service';
 import { CreateProductRatingsDto, UpdateProductRatingsDto } from './dto/products_ratings.dto';
 import { CurrentUser } from 'src/auth/decorators/curretn-user.decorator';
-import { Users } from 'generated/prisma';
 import { User } from 'src/user/entity/user.entity';
 import { IsPublic } from 'src/auth/decorators/is-public.decorator';
 
