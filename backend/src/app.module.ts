@@ -13,6 +13,7 @@ import { ProductsModule } from './products/products.module';
 import { ProductsImagesModule } from './products-images/products-images.module';
 import { CommentsModule } from './comments/comments.module';
 import { CategoriesModule } from './categories/categories.module';
+import { UploadController } from './upload/upload.controller';
 
 @Module({
   imports: [
@@ -27,7 +28,7 @@ import { CategoriesModule } from './categories/categories.module';
     CategoriesModule
   ],
 
-  controllers: [AppController],
+  controllers: [AppController, UploadController],
   providers: [
     AppService, 
     PrismaService,

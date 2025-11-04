@@ -25,15 +25,15 @@ export class CreateStoreDto {
   description?: string;
 
   @IsOptional()
-  @IsUrl()
+  @IsString()
   logo_url?: string;
 
   @IsOptional()
-  @IsUrl()
+  @IsString()
   banner_url?: string;
 
   @IsOptional()
-  @IsUrl()
+  @IsString()
   sticker_url?: string;
 }
 
