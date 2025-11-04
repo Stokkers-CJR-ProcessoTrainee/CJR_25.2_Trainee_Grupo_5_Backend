@@ -65,4 +65,9 @@ export class UserController {
     return this.userService.findProductsByUser(id);
   }
 
+  @IsPublic()
+  @Get(':id/ratings')
+  findRatingsByUser(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.findRatingsByUser(id);
+  }
 }
