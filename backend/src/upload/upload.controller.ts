@@ -1,9 +1,11 @@
 import { Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { IsPublic } from 'src/auth/decorators/is-public.decorator';
 
 @Controller('upload')
 export class UploadController {
+  @IsPublic()
   @Post()
   @UseInterceptors(FileInterceptor('file', {
     storage: diskStorage({
