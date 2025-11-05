@@ -61,10 +61,10 @@ export class CommentsService {
       where: { id: ratingId }
     })
     if (!rating) {
-      return new NotFoundException("Avaliação não encontrada")
+      throw new NotFoundException("Avaliação não encontrada")
     }
     return this.prisma.ratingComments.findMany({
-      where: { store_rating_id: ratingId },
+      where: { product_rating_id: ratingId },
       include: { user: { select : { username: true, profile_picture_url: true } } },
     });
   }
