@@ -1,9 +1,9 @@
 import { Controller, Get, Post, Body, Param, Delete, Put, ParseIntPipe, Patch } from '@nestjs/common';
 import { CommentsService } from './comments.service';
-import type { CommentDto } from './comment.dto';
 import { CurrentUser } from 'src/auth/decorators/curretn-user.decorator';
 import { User } from 'src/user/entity/user.entity';
 import { IsPublic } from 'src/auth/decorators/is-public.decorator';
+import { CommentDto } from './comment.dto';
 
 @Controller('comments')
 export class CommentsController {
