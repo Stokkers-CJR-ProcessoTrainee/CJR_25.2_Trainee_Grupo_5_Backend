@@ -48,7 +48,7 @@ export class CommentsService {
       where: { id: ratingId }
     })
     if (!rating) {
-      return new NotFoundException("Avaliação não encontrada")
+      throw new NotFoundException("Avaliação não encontrada")
     }
     return this.prisma.ratingComments.findMany({
       where: { store_rating_id: ratingId },
