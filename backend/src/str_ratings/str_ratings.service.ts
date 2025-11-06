@@ -47,7 +47,14 @@ export class StoreRatingsService {
     async getUnique(id: number) {
         const ratingExists = await this.prisma.storeRatings.findUnique ({
             where: { id },
-            include: { user: {select: { username: true, profile_picture_url: true }}}
+            include: { 
+                user: {
+                    select: { username: true, profile_picture_url: true }
+                },
+                store: {
+                    select: { user_id: true}
+                }
+            }
         });
         if (!ratingExists) {
             throw new NotFoundException("Avaliação não encontrada");
