@@ -74,5 +74,23 @@ export class CommentsController {
   }
 
 
+  @Delete('store-rating/:ratingId/:id')
+  async deleteStoreComment(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('ratingId', ParseIntPipe) ratingId: number,
+    @CurrentUser() user: User,
+  ) {
+    return this.commentsService.deleteStoreComment(id, user.id, ratingId );
+  }
+  
+  @Delete('product-rating/:ratingId/:id')
+  async deleteProductComment(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('ratingId', ParseIntPipe) ratingId: number,
+    @CurrentUser() user: User,
+  ) {
+    return this.commentsService.deleteProductComment(id, user.id, ratingId );
+  }
+
 }
 
