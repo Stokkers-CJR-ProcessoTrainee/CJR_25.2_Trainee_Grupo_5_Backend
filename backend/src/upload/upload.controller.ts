@@ -17,8 +17,8 @@ export class UploadController {
       },
     }),
   }))
-  uploadFile(@UploadedFile() file: Express.Multer.File) {
+  uploadFile(@UploadedFile() file: null) {
     // retorna a URL pública do arquivo
-    return { url: `http://localhost:3001/uploads/${file.filename}` };
+    return {null:null};
   }
 }
