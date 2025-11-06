@@ -139,35 +139,35 @@ export class CommentsService {
     });
   }
 
-    async deleteStoreComment(id: number, userId: number, store_rating_id:number) {
-      const commentexists = await this.prisma.ratingComments.findUnique({
-        where: { id }
-      })
-      if (!commentexists) {
-        throw new NotFoundException("Comentário não encontrado")
-      }
+  async deleteStoreComment(id: number, userId: number, store_rating_id:number) {
+    const commentexists = await this.prisma.ratingComments.findFirst({
+      where: { id, store_rating_id }
+    })
+    if (!commentexists) {
+      throw new NotFoundException("Comentário não encontrado")
+    }
       
-      if (commentexists.user_id !== userId) {
-        throw new ForbiddenException("Você não tem permissao para deletar esse comentário")
-      }
-      return await this.prisma.ratingComments.delete({
-        where: { id, store_rating_id},
-      });
+    if (commentexists.user_id !== userId) {
+      throw new ForbiddenException("Você não tem permissao para deletar esse comentário")
+    }
+    return await this.prisma.ratingComments.delete({
+      where: { id},
+    });
   }
 
-    async deleteProductComment(id: number, userId: number, product_rating_id:number) {
-      const commentexists = await this.prisma.ratingComments.findUnique({
-        where: { id }
-      })
-      if (!commentexists) {
-        throw new NotFoundException("Comentário não encontrado")
-      }
-      
-      if (commentexists.user_id !== userId) {
-        throw new ForbiddenException("Você não tem permissao para deletar esse comentário")
-      }
-      return await this.prisma.ratingComments.delete({
-        where: { id, product_rating_id},
-      });
+  async deleteProductComment(id: number, userId: number, product_rating_id:number) {
+    const commentexists = await this.prisma.ratingComments.findFirst({
+      where: { id, product_rating_id }
+    })
+    if (!commentexists) {
+      throw new NotFoundException("Comentário não encontrado")
     }
+      
+    if (commentexists.user_id !== userId) {
+      throw new ForbiddenException("Você não tem permissao para deletar esse comentário")
+    }
+    return await this.prisma.ratingComments.delete({
+      where: { id },
+    });
+  }
 }
