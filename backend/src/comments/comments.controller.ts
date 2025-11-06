@@ -45,6 +45,26 @@ export class CommentsController {
     return this.commentsService.update(id, data, user.id);
   }
 
+  @Patch('store-rating/:ratingId/:id')
+  async storeCommentUpdate(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('ratingId', ParseIntPipe) ratingId: number,
+    @CurrentUser() user: User,
+    @Body() data: CommentDto,
+  ) {
+    return this.commentsService.storeCommentUpdate(id, data, user.id, ratingId);
+  }
+
+  @Patch('product-rating/:ratingId/:id')
+  async productCommentUpdate(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('ratingId', ParseIntPipe) ratingId: number,
+    @CurrentUser() user: User,
+    @Body() data: CommentDto,
+  ) {
+    return this.commentsService.productCommentUpdate(id, data, user.id, ratingId);
+  }
+
   @Delete(':id')
   async delete(
     @Param('id', ParseIntPipe) id: number,

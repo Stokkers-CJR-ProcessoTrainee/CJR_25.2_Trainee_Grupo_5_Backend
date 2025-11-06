@@ -86,6 +86,42 @@ export class CommentsService {
     })
   }
 
+    async storeCommentUpdate(id: number, data: CommentDto, userId: number, store_rating_id:number) {
+    const commentexists = await this.prisma.ratingComments.findUnique({
+      where: { id }
+    })
+    if (!commentexists) {
+      throw new NotFoundException("Comentário não encontrado")
+    }
+
+    if (commentexists.user_id !== userId) {
+      throw new ForbiddenException("Você não tem permissão para editar esse comentário")
+    }
+
+    return await this.prisma.ratingComments.updateMany({
+      where: { id, store_rating_id },
+      data: data,
+    });
+  }
+
+    async productCommentUpdate(id: number, data: CommentDto, userId: number, product_rating_id:number) {
+    const commentexists = await this.prisma.ratingComments.findUnique({
+      where: { id }
+    })
+    if (!commentexists) {
+      throw new NotFoundException("Comentário não encontrado")
+    }
+
+    if (commentexists.user_id !== userId) {
+      throw new ForbiddenException("Você não tem permissão para editar esse comentário")
+    }
+
+    return await this.prisma.ratingComments.updateMany({
+      where: { id, product_rating_id },
+      data: data,
+    });
+  }
+
   async delete(id: number, userId: number) {
     const commentexists = await this.prisma.ratingComments.findUnique({
       where: { id }
