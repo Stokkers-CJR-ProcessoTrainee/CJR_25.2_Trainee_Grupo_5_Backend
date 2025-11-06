@@ -22,7 +22,8 @@ export class CommentsService {
         user_id: UserId,
         store_rating_id: StoreRatingId,
       },
-    })
+      include: { user: { select: { username:true, profile_picture_url: true}}},
+    });
   }
 
   async createProductRatingComment(data: CommentDto, ProductRatingId: number, UserId: number) {
