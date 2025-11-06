@@ -99,7 +99,7 @@ export class CommentsService {
       throw new ForbiddenException("Você não tem permissão para editar esse comentário")
     }
 
-    return await this.prisma.ratingComments.updateMany({
+    return await this.prisma.ratingComments.update({
       where: { id, store_rating_id },
       data: data,
     });
@@ -117,7 +117,7 @@ export class CommentsService {
       throw new ForbiddenException("Você não tem permissão para editar esse comentário")
     }
 
-    return await this.prisma.ratingComments.updateMany({
+    return await this.prisma.ratingComments.update({
       where: { id, product_rating_id },
       data: data,
     });
