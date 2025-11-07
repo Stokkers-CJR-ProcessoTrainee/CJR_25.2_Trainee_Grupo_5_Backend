@@ -47,6 +47,9 @@ export class ProductsService {
         return this.prisma.products.findMany({  
             where: {
                 store_id: storeId,
+            },
+            include: {
+                product_images: true,
             }
         });
     }
