@@ -50,6 +50,7 @@ export class ProductsService {
             },
             include: {
                 product_images: true,
+                store: true,
             }
         });
     }
