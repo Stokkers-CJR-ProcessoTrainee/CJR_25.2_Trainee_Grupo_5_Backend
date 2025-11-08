@@ -6,14 +6,13 @@ import { User } from 'src/user/entity/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { UserToken } from './models/UserToken';
 import { PrismaService } from 'src/database/prisma.service';
-import { MailService } from './auxiliar/mail.service';
+import { sendVerifyCode } from './auxiliar/mail.service';
 
 @Injectable()
 export class AuthService {
     constructor(private readonly userService: UserService,
                 private readonly jwtService: JwtService,
                 private readonly prisma: PrismaService,
-                private readonly mailService: MailService
     ) {}
 
     login(user: User):UserToken {
@@ -64,7 +63,7 @@ export class AuthService {
                 expiresAt
             }
         });
-        await this.mailService.sendResetCode(user.email, code);
+        await sendVerifyCode(user.email, code);
         return {message: 'Código para recuperação de senha enviadas para o seu email!'}
     }
 
