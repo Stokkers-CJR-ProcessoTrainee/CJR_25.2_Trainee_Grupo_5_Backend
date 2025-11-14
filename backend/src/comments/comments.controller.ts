@@ -1,9 +1,9 @@
 import { Controller, Get, Post, Body, Param, Delete, Put, ParseIntPipe, Patch } from '@nestjs/common';
 import { CommentsService } from './comments.service';
-import type { CommentDto } from './comment.dto';
 import { CurrentUser } from 'src/auth/decorators/curretn-user.decorator';
 import { User } from 'src/user/entity/user.entity';
 import { IsPublic } from 'src/auth/decorators/is-public.decorator';
+import { CommentDto } from './comment.dto';
 
 @Controller('comments')
 export class CommentsController {
@@ -45,6 +45,26 @@ export class CommentsController {
     return this.commentsService.update(id, data, user.id);
   }
 
+  @Patch('store-rating/:ratingId/:id')
+  async storeCommentUpdate(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('ratingId', ParseIntPipe) ratingId: number,
+    @CurrentUser() user: User,
+    @Body() data: CommentDto,
+  ) {
+    return this.commentsService.storeCommentUpdate(id, data, user.id, ratingId);
+  }
+
+  @Patch('product-rating/:ratingId/:id')
+  async productCommentUpdate(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('ratingId', ParseIntPipe) ratingId: number,
+    @CurrentUser() user: User,
+    @Body() data: CommentDto,
+  ) {
+    return this.commentsService.productCommentUpdate(id, data, user.id, ratingId);
+  }
+
   @Delete(':id')
   async delete(
     @Param('id', ParseIntPipe) id: number,
@@ -53,6 +73,24 @@ export class CommentsController {
     return this.commentsService.delete(id, user.id);
   }
 
+
+  @Delete('store-rating/:ratingId/:id')
+  async deleteStoreComment(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('ratingId', ParseIntPipe) ratingId: number,
+    @CurrentUser() user: User,
+  ) {
+    return this.commentsService.deleteStoreComment(id, user.id, ratingId );
+  }
+  
+  @Delete('product-rating/:ratingId/:id')
+  async deleteProductComment(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('ratingId', ParseIntPipe) ratingId: number,
+    @CurrentUser() user: User,
+  ) {
+    return this.commentsService.deleteProductComment(id, user.id, ratingId );
+  }
 
 }
 
