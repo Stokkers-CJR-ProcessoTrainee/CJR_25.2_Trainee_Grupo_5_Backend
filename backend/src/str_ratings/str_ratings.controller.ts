@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Patch } from '@nestjs/common';
 import { CreateStoreRatingsDto, UpdateStoreRatingsDto } from './dto/str_ratings.dto';
 import { StoreRatingsService } from './str_ratings.service';
 import { CurrentUser } from 'src/auth/decorators/curretn-user.decorator';
@@ -33,7 +33,7 @@ export class StoreRatingsController {
         return this.storeRatingsService.getUnique(id)
     }
 
-    @Put(":id")
+    @Patch(":id")
     async update(
         @Param("id", ParseIntPipe) id: number, 
         @CurrentUser() user: User,

@@ -52,18 +52,22 @@ export class ProductsService {
   }
 
   async findAllByCategory(categoryId: number) {
-    const category = await this.prisma.categories.findUnique({
-      where: { id: categoryId }
+    const category = await this.prisma.categories.findUnique ({
+        where: { id: categoryId }
     })
 
     if (!category) {
-      throw new NotFoundException("Categoria não encontrada")
+        throw new NotFoundException("Categoria não encontrada")
     }
 
-    return this.prisma.products.findMany({
-      where: {
-        category_id: categoryId,
-      }
+    return this.prisma.products.findMany({  
+        where: {
+            category_id: categoryId,
+        },
+        include: {
+            store: true,
+            product_images: true
+        }
     });
   }
 

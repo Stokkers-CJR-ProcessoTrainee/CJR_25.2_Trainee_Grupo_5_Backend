@@ -50,14 +50,17 @@ export class ProductRatingsService {
         }
     
         async getUnique(id: number) {
-            const ratingExists = await this.prisma.productRatings.findUnique ({
-                where: { id: id }
+            const rating = await this.prisma.productRatings.findUnique ({
+                where: { id: id }, 
+                include: {
+                    product: true,
+                },
             });
-            if (!ratingExists) {
+            if (!rating) {
                 throw new NotFoundException("Avaliação não encontrada");
             }
-            return ratingExists;
-        }
+            return rating;
+        }       
     
         async update(ratingId: number, data: UpdateProductRatingsDto, userId: number) {
             const rating = await this.prisma.productRatings.findUnique ({

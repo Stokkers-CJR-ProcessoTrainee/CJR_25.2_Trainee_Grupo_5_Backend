@@ -52,7 +52,7 @@ export class StoreRatingsService {
                     select: { username: true, profile_picture_url: true }
                 },
                 store: {
-                    select: { user_id: true}
+                    select: { user_id: true, name: true}
                 }
             }
         });
