@@ -12,6 +12,7 @@ export class StoresService {
     data: {
       ...data,
       user_id: userId,
+      sticker_url: data.sticker_url ?? "/foto-loja.png"
     },
   });
   return stores;
