@@ -50,7 +50,8 @@ export class ProductsService {
       },
       include: {
         store:true,
-        product_images: true
+        product_images: true,
+        product_ratings: { select: { rating: true } }
       }
     });
   }
