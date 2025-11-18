@@ -3,6 +3,7 @@ import { CreateProductsDto } from './dto/products.dto';
 import { PrismaService } from '../database/prisma.service';
 import { UpdateProductsDto } from './dto/update-products.dto';
 
+
 @Injectable()
 export class ProductsService {
 
@@ -49,38 +50,72 @@ export class ProductsService {
         store_id: storeId,
       },
       include: {
-        store:true,
+        store: true,
         product_images: true,
         product_ratings: { select: { rating: true } }
       }
     });
   }
 
+  //
+  //  async findAllByCategory(categoryId: number) {
+  //    const category = await this.prisma.categories.findUnique({
+  //      where: { id: categoryId }
+  //    })
+  //
+  //    if (!category) {
+  //      throw new NotFoundException("Categoria não encontrada")
+  //    }
+  //
+  //    return this.prisma.products.findMany({
+  //      where: {
+  //        category_id: categoryId,
+  //      },
+  //      include: { store: true, product_images: true }
+  //    });
+  //  }
+  //
+
   async findAllByCategory(categoryId: number) {
-    const category = await this.prisma.categories.findUnique ({
-        where: { id: categoryId }
-    })
+    const category = await this.prisma.categories.findUnique({
+      where: { id: categoryId },
+    });
 
     if (!category) {
-        throw new NotFoundException("Categoria não encontrada")
+      throw new NotFoundException('Categoria não encontrada');
     }
 
-    return this.prisma.products.findMany({  
-        where: {
-            category_id: categoryId,
+    const categoryIds = await this.prisma.$queryRaw<[{ id: number }]>`
+      WITH RECURSIVE "DescendantCategories" AS (
+        SELECT "id"
+        FROM "Categories"
+        WHERE "id" = ${categoryId}
+        
+        UNION ALL
+        
+        SELECT c."id"
+        FROM "Categories" c
+        JOIN "DescendantCategories" dc ON c."parent_category_id" = dc."id"
+      )
+      SELECT "id" FROM "DescendantCategories";
+    `;
+
+    const allCategoryIds = categoryIds.map((c) => c.id);
+
+    return this.prisma.products.findMany({
+      where: {
+        category_id: {
+          in: allCategoryIds,
         },
-        include: {
-            store: true,
-            product_images: true
-        }
+      },
+      include: { store: true, product_images: true },
     });
   }
-
 
   async findOne(id: number) {
     return await this.prisma.products.findFirst({
       where: { id: id },
-      include: { store: { select: { banner_url: true, user_id: true } }, category: { select: { name: true } }, product_images: { select: { order: true, image_url: true } }, product_ratings: { select: { rating: true } } }
+      include: { store: { select: { sticker_url: true, user_id: true } }, category: { select: { name: true } }, product_images: { select: { order: true, image_url: true } }, product_ratings: { select: { rating: true } } }
     });
   }
 
