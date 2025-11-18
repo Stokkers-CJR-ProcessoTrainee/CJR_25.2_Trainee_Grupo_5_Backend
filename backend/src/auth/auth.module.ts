@@ -8,7 +8,6 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LoginValidationMiddleware } from './middleware/login-validation.middleware';
 import { PrismaService } from 'src/database/prisma.service';
-import { MailService } from './auxiliar/mail.service';
 
 @Module({
   imports: [
@@ -19,7 +18,7 @@ import { MailService } from './auxiliar/mail.service';
       signOptions: { expiresIn: '30d' },
     }),],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy, PrismaService, MailService],
+  providers: [AuthService, LocalStrategy, JwtStrategy, PrismaService,],
 })
 export class AuthModule {
   configure(consomer: MiddlewareConsumer) {

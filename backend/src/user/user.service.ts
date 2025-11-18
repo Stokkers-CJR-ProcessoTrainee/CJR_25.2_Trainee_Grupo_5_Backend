@@ -12,6 +12,7 @@ export class UserService {
     const data = {
       ...createUserDto,
       password_hash: await bcrypt.hash(createUserDto.password_hash, 10),
+      profile_picture_url: "/default-avatar.png",
     } 
 
     const new_user = await this.prisma.users.create({

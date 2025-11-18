@@ -49,7 +49,11 @@ export class ProductsService {
       where: {
         store_id: storeId,
       },
-      include: { store: true, product_images: true }
+      include: {
+        store: true,
+        product_images: true,
+        product_ratings: { select: { rating: true } }
+      }
     });
   }
 

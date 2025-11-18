@@ -12,6 +12,8 @@ export class StoresService {
     data: {
       ...data,
       user_id: userId,
+      sticker_url: data.sticker_url ?? "/foto-loja.png",
+      banner_url: data.banner_url ?? "/banner-loja.svg"
     },
   });
   return stores;
@@ -23,7 +25,7 @@ export class StoresService {
 
   async findOne(id: number) {
     const storeExists = await this.prisma.stores.findUnique({ 
-    where: {id} 
+    where: {id}
   })
   if(!storeExists){
     throw new NotFoundException("Loja não encontrada")

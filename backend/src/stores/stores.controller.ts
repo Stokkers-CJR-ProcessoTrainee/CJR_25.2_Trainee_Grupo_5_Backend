@@ -26,7 +26,7 @@ export class StoresController {
 
   @IsPublic()
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id', ParseIntPipe) id: string) {
     return this.storesService.findOne(Number(id));
   }
   

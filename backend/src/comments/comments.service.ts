@@ -22,7 +22,8 @@ export class CommentsService {
         user_id: UserId,
         store_rating_id: StoreRatingId,
       },
-    })
+      include: { user: { select: { username:true, profile_picture_url: true}}},
+    });
   }
 
   async createProductRatingComment(data: CommentDto, ProductRatingId: number, UserId: number) {
@@ -48,7 +49,7 @@ export class CommentsService {
       where: { id: ratingId }
     })
     if (!rating) {
-      return new NotFoundException("Avaliação não encontrada")
+      throw new NotFoundException("Avaliação não encontrada")
     }
     return this.prisma.ratingComments.findMany({
       where: { store_rating_id: ratingId },
@@ -61,10 +62,10 @@ export class CommentsService {
       where: { id: ratingId }
     })
     if (!rating) {
-      return new NotFoundException("Avaliação não encontrada")
+      throw new NotFoundException("Avaliação não encontrada")
     }
     return this.prisma.ratingComments.findMany({
-      where: { store_rating_id: ratingId },
+      where: { product_rating_id: ratingId },
       include: { user: { select : { username: true, profile_picture_url: true } } },
     });
   }
@@ -86,6 +87,42 @@ export class CommentsService {
     })
   }
 
+    async storeCommentUpdate(id: number, data: CommentDto, userId: number, store_rating_id:number) {
+    const commentexists = await this.prisma.ratingComments.findUnique({
+      where: { id }
+    })
+    if (!commentexists) {
+      throw new NotFoundException("Comentário não encontrado")
+    }
+
+    if (commentexists.user_id !== userId) {
+      throw new ForbiddenException("Você não tem permissão para editar esse comentário")
+    }
+
+    return await this.prisma.ratingComments.update({
+      where: { id, store_rating_id },
+      data: data,
+    });
+  }
+
+    async productCommentUpdate(id: number, data: CommentDto, userId: number, product_rating_id:number) {
+    const commentexists = await this.prisma.ratingComments.findUnique({
+      where: { id }
+    })
+    if (!commentexists) {
+      throw new NotFoundException("Comentário não encontrado")
+    }
+
+    if (commentexists.user_id !== userId) {
+      throw new ForbiddenException("Você não tem permissão para editar esse comentário")
+    }
+
+    return await this.prisma.ratingComments.update({
+      where: { id, product_rating_id },
+      data: data,
+    });
+  }
+
   async delete(id: number, userId: number) {
     const commentexists = await this.prisma.ratingComments.findUnique({
       where: { id }
@@ -94,6 +131,38 @@ export class CommentsService {
       throw new NotFoundException("Comentário não encontrado")
     }
     
+    if (commentexists.user_id !== userId) {
+      throw new ForbiddenException("Você não tem permissao para deletar esse comentário")
+    }
+    return await this.prisma.ratingComments.delete({
+      where: { id },
+    });
+  }
+
+  async deleteStoreComment(id: number, userId: number, store_rating_id:number) {
+    const commentexists = await this.prisma.ratingComments.findFirst({
+      where: { id, store_rating_id }
+    })
+    if (!commentexists) {
+      throw new NotFoundException("Comentário não encontrado")
+    }
+      
+    if (commentexists.user_id !== userId) {
+      throw new ForbiddenException("Você não tem permissao para deletar esse comentário")
+    }
+    return await this.prisma.ratingComments.delete({
+      where: { id},
+    });
+  }
+
+  async deleteProductComment(id: number, userId: number, product_rating_id:number) {
+    const commentexists = await this.prisma.ratingComments.findFirst({
+      where: { id, product_rating_id }
+    })
+    if (!commentexists) {
+      throw new NotFoundException("Comentário não encontrado")
+    }
+      
     if (commentexists.user_id !== userId) {
       throw new ForbiddenException("Você não tem permissao para deletar esse comentário")
     }
