@@ -43,4 +43,12 @@ export class CategoriesController {
     return this.categoriesService.delete(id);
   }
 
+  @IsPublic()
+  @Get('children/:id')
+  findChildren(@Param('id', ParseIntPipe) id: number){
+      return this.categoriesService.findChildren(id);
+  }
+
+    
+
 }

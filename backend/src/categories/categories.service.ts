@@ -68,4 +68,16 @@ export class CategoriesService {
     return categoryexists;
   }
 
+    async findChildren(id: number) {
+        const categoryexists = await this.prisma.categories.findUnique({
+            where: {id}
+        });
+        if(!categoryexists){
+            throw new NotFoundException("Categoria não encontrada")
+        }
+        return this.prisma.categories.findMany({
+            where: {parent_category_id: id}
+        });
+    }
+
 }
