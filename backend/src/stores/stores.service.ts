@@ -25,7 +25,14 @@ export class StoresService {
 
   async findOne(id: number) {
     const storeExists = await this.prisma.stores.findUnique({ 
-    where: {id}
+    where: {id},
+    include: {
+      owner: {
+        select: {
+          name: true
+        }
+      }
+    }
   })
   if(!storeExists){
     throw new NotFoundException("Loja não encontrada")
