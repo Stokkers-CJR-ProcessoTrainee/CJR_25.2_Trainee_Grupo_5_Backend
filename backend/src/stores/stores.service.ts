@@ -12,7 +12,7 @@ export class StoresService {
     data: {
       ...data,
       user_id: userId,
-      sticker_url: data.sticker_url ?? "/foto-loja.png",
+      sticker_url: data.sticker_url ?? "/foto-loja.svg",
       banner_url: data.banner_url ?? "/banner-loja.svg"
     },
   });
