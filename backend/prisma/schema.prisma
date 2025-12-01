@@ -1,0 +1,127 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id                  Int              @id @default(autoincrement())
+  username            String           @unique
+  name                String
+  email               String           @unique
+  password_hash       String
+  profile_picture_url String?
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  stores              Stores[]
+  store_ratings       StoreRatings[]
+  product_ratings     ProductRatings[]
+  rating_comments     RatingComments[]
+  passwordResets      PasswordReset[]
+}
+
+model Stores {
+  id            Int            @id @default(autoincrement())
+  user_id       Int
+  owner         Users          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  name          String
+  description   String?
+  logo_url      String?
+  banner_url    String?
+  sticker_url   String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  products      Products[]
+  store_ratings StoreRatings[]
+}
+
+model Products {
+  id              Int              @id @default(autoincrement())
+  store_id        Int
+  store           Stores           @relation(fields: [store_id], references: [id], onDelete: Cascade)
+  category_id     Int
+  category        Categories       @relation(fields: [category_id], references: [id])
+  name            String
+  description     String?
+  price           Decimal          @db.Decimal(8, 2)
+  stock           Int
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  product_ratings ProductRatings[]
+  product_images  ProductImages[]
+}
+
+model Categories {
+  id                 Int          @id @default(autoincrement())
+  name               String
+  parent_category_id Int?
+  parent_category    Categories?  @relation("CategoryHierarchy", fields: [parent_category_id], references: [id], onDelete: Cascade)
+  products           Products[]
+  child_categories   Categories[] @relation("CategoryHierarchy")
+}
+
+model ProductImages {
+  id         Int      @id @default(autoincrement())
+  product_id Int
+  product    Products @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  image_url  String
+  order      Int
+}
+
+model StoreRatings {
+  id              Int              @id @default(autoincrement())
+  user_id         Int
+  user            Users            @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  store_id        Int
+  store           Stores           @relation(fields: [store_id], references: [id], onDelete: Cascade)
+  rating          Int
+  comment         String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  rating_comments RatingComments[]
+}
+
+model ProductRatings {
+  id              Int              @id @default(autoincrement())
+  user_id         Int
+  user            Users            @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  product_id      Int
+  product         Products         @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  rating          Int
+  comment         String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  rating_comments RatingComments[]
+}
+
+model RatingComments {
+  id                Int             @id @default(autoincrement())
+  user_id           Int
+  user              Users           @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  store_rating_id   Int?
+  store_rating      StoreRatings?   @relation(fields: [store_rating_id], references: [id], onDelete: Cascade)
+  product_rating_id Int?
+  product_rating    ProductRatings? @relation(fields: [product_rating_id], references: [id], onDelete: Cascade)
+  content           String
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+}
+
+model PasswordReset {
+  id                Int             @id @default(autoincrement())
+  user              Users           @relation(fields: [userId], references: [id])
+  userId            Int
+  code              String
+  expiresAt         DateTime
+  used              Boolean         @default(false)
+  createdAt         DateTime        @default(now())
+}
