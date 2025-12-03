@@ -68,6 +68,7 @@ model Categories {
   parent_category_id Int?
   parent_category    Categories?  @relation("CategoryHierarchy", fields: [parent_category_id], references: [id], onDelete: Cascade)
   products           Products[]
+  stores             Stores[]
   child_categories   Categories[] @relation("CategoryHierarchy")
 }
 
