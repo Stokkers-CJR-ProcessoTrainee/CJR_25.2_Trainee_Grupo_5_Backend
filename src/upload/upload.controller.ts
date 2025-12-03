@@ -19,6 +19,6 @@ export class UploadController {
   }))
   uploadFile(@UploadedFile() file: Express.Multer.File) {
     // retorna url publica
-    return { url: `http://localhost:3001/uploads/${file.filename}` };
+    return { url: `https://stokkers.onrender.com/uploads/${file.filename}` };
   }
 }
