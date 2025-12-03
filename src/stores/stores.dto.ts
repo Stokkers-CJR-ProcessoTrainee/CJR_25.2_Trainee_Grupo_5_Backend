@@ -14,11 +14,14 @@
 //}
 
 import { PartialType } from "@nestjs/mapped-types";
-import { IsOptional, IsString, IsUrl } from "class-validator";
+import { IsNumber, isNumber, IsOptional, IsString, IsUrl } from "class-validator";
 
 export class CreateStoreDto {
   @IsString()
   name: string;
+
+  @IsNumber()
+  category_id: number;
 
   @IsOptional()
   @IsString()
