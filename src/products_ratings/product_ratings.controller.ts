@@ -27,13 +27,6 @@ export class ProductRatingsController {
             return this.productRatingsService.getAll(productId);
         }
     
-        @IsPublic()
-        @Get(":id")
-        async getUnique(
-            @Param("id", ParseIntPipe) id: number) {
-            return this.productRatingsService.getUnique(id)
-        }
-    
         @Patch(":id")
         async update(
             @Param("id", ParseIntPipe) id: number,
@@ -49,6 +42,13 @@ export class ProductRatingsController {
             @CurrentUser() user: User,
         ) {
             return this.productRatingsService.delete(id, user.id);
+        }
+    
+        @IsPublic()
+        @Get(":id")
+        async getUnique(
+            @Param("id", ParseIntPipe) id: number) {
+            return this.productRatingsService.getUnique(id)
         }
         
     }

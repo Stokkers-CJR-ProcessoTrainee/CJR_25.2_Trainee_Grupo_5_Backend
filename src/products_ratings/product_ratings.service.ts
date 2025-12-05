@@ -53,15 +53,26 @@ export class ProductRatingsService {
             const rating = await this.prisma.productRatings.findUnique ({
                 where: { id: id }, 
                 include: {
-                    product: true,
                     user: true,
+                    product: { // <--- Começa a inclusão aninhada
+                        include: {
+                            store: { // <--- Inclui a loja
+                                select: {
+                                    user_id: true, // Seleciona o ID do dono da loja
+                                    name: true,
+                                    // ... outros campos necessários
+                                }
+                            }
+                        }
+                    }, 
                 },
             });
+            
             if (!rating) {
                 throw new NotFoundException("Avaliação não encontrada");
             }
             return rating;
-        }       
+        }      
     
         async update(ratingId: number, data: UpdateProductRatingsDto, userId: number) {
             const rating = await this.prisma.productRatings.findUnique ({
