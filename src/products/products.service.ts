@@ -123,7 +123,10 @@ export class ProductsService {
             select: { name: true } 
           }, 
           product_images: { 
-            select: { order: true, image_url: true } 
+            select: { 
+              id: true,
+              order: true, 
+              image_url: true } 
           }, 
           product_ratings: { 
             select: {
