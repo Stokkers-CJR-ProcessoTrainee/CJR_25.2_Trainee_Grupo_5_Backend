@@ -113,11 +113,33 @@ export class ProductsService {
   }
 
   async findOne(id: number) {
-    return await this.prisma.products.findFirst({
-      where: { id: id },
-      include: { store: { select: { sticker_url: true, user_id: true } }, category: { select: { name: true } }, product_images: { select: { order: true, image_url: true } }, product_ratings: { select: { rating: true } } }
-    });
-  }
+      return await this.prisma.products.findFirst({
+        where: { id: id },
+        include: { 
+          store: { 
+            select: { sticker_url: true, user_id: true } 
+          }, 
+          category: { 
+            select: { name: true } 
+          }, 
+          product_images: { 
+            select: { order: true, image_url: true } 
+          }, 
+          product_ratings: { 
+            select: { 
+              rating: true, 
+              comment: true, 
+              user: {      
+                select: { 
+                  username: true, 
+                  profile_picture_url: true 
+                } 
+              } 
+            } 
+          } 
+        }
+      });
+    }
 
   async update(productId: number, data: UpdateProductsDto, userId) {
     const product = await this.prisma.products.findUnique({
