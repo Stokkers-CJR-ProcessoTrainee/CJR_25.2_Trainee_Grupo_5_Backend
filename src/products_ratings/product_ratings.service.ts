@@ -54,6 +54,7 @@ export class ProductRatingsService {
                 where: { id: id }, 
                 include: {
                     product: true,
+                    user: true,
                 },
             });
             if (!rating) {
