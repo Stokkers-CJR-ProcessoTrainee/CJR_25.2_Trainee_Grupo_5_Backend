@@ -126,7 +126,8 @@ export class ProductsService {
             select: { order: true, image_url: true } 
           }, 
           product_ratings: { 
-            select: { 
+            select: {
+              id: true, 
               rating: true, 
               comment: true, 
               user: {      
