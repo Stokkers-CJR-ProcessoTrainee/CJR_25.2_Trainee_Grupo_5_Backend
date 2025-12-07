@@ -5,6 +5,7 @@ import { CurrentUser } from 'src/auth/decorators/curretn-user.decorator';
 import { User } from 'src/user/entity/user.entity';
 import { UpdateProductsDto } from './dto/update-products.dto';
 import { IsPublic } from 'src/auth/decorators/is-public.decorator';
+import { HashIdPipe } from 'src/commons/pipes/hash-id.pipe';
 
 
 @Controller('products')
@@ -40,7 +41,7 @@ export class ProductsController {
     
     @IsPublic()
     @Get(':id')
-    findOne(@Param('id', ParseIntPipe) id: number){
+    findOne(@Param('id', HashIdPipe) id: number){
         return this.productsService.findOne(id);
     }
 
