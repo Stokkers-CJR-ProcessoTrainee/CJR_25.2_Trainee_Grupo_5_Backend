@@ -1,6 +1,5 @@
 import { Resend } from 'resend';
 
-// Inicializa o Resend apenas se a chave existir
 const resend = process.env.RESEND_API_KEY 
   ? new Resend(process.env.RESEND_API_KEY) 
   : null;
@@ -14,8 +13,6 @@ export async function sendVerifyCode(to: string, code: string) {
 
   try {
     const data = await resend.emails.send({
-      // O Resend exige que o remetente seja este no modo de teste, 
-      // ou um domínio verificado teu.
       from: 'onboarding@resend.dev', 
       to: to, 
       subject: 'Seu código de verificação',
@@ -30,10 +27,6 @@ export async function sendVerifyCode(to: string, code: string) {
         </div>
       `,
     });
-
-    console.log("Email enviado com sucesso via Resend!");
-    console.log("ID do Email:", data.data?.id);
-
   } catch (error) {
     console.error("ERRO AO ENVIAR EMAIL (Resend):", error);
     throw new Error('Falha ao enviar e-mail via API.');
