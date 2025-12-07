@@ -60,4 +60,15 @@ export class ProductsController {
     ){
         return this.productsService.delete(id, user.id);
     }  
+
+    @Post('checkout')
+    async checkout(@Body() items: { id: number; quantity: number }[]) {
+        if (!items || items.length === 0) {
+        return { message: "Carrinho vazio" }; 
+        }
+        
+        await this.productsService.checkout(items);
+        
+        return { message: "Compra realizada com sucesso e estoque atualizado." };
+    }
 }

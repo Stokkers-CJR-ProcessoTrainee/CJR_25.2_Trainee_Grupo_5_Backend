@@ -167,4 +167,29 @@ export class ProductsService {
       where: { id: productId }
     });
   }
+
+  async checkout(items: { id: number; quantity: number }[]) {
+    return await this.prisma.$transaction(async (tx) => {
+      for (const item of items) {
+        const product = await tx.products.findUnique({
+          where: { id: item.id }
+        });
+
+        if (!product) {
+          throw new NotFoundException(`Produto ID ${item.id} não encontrado.`);
+        }
+
+        if (product.stock < item.quantity) {
+          throw new ForbiddenException(`Estoque insuficiente para o produto: ${product.name}`);
+        }
+
+        await tx.products.update({
+          where: { id: item.id },
+          data: {
+            stock: product.stock - item.quantity
+          }
+        });
+      }
+    });
+  }
 }
