@@ -41,7 +41,7 @@ export class ProductsController {
     
     @IsPublic()
     @Get(':id')
-    findOne(@Param('id', HashIdPipe) id: number){
+    findOne(@Param('id', ParseIntPipe) id: number){
         return this.productsService.findOne(id);
     }
 
