@@ -1,16 +1,25 @@
 import nodemailer from 'nodemailer';
 
-export const trasnporter = nodemailer.createTransport({
-  service: "gmail",
+if (!process.env.MAIL_USER || !process.env.MAIL_PASS) {
+  console.error("ERRO CRÍTICO: Variáveis de ambiente de e-mail não configuradas!");
+}
+
+export const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com', 
+  port: 587,             
+  secure: false,        
   auth: {
     user: process.env.MAIL_USER,
     pass: process.env.MAIL_PASS,
+  },
+  tls: {
+    rejectUnauthorized: false 
   }
 });
 
-export async function sendVerifyCode(to:string, code:string) {
+export async function sendVerifyCode(to: string, code: string) {
   const mailOps = {
-    from: process.env.MAIL_USER,
+    from: `"Suporte" <${process.env.MAIL_USER}>`, 
     to,
     subject: "Seu código de verificação",
     html: `
@@ -21,6 +30,13 @@ export async function sendVerifyCode(to:string, code:string) {
     `,
   };
 
-  await trasnporter.sendMail(mailOps);
-
+  try {
+    const info = await transporter.sendMail(mailOps);
+    console.log("Email enviado com sucesso para:", to);
+    console.log("Message ID:", info.messageId);
+  } catch (error) {
+    console.error("ERRO AO ENVIAR EMAIL (Nodemailer):");
+    console.error(error);
+    throw new Error('Falha ao enviar e-mail. Tente novamente mais tarde.');
+  }
 }
