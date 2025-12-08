@@ -11,8 +11,7 @@ import { IsInt, IsNotEmpty, IsNumber, IsString, IsUrl, Min } from "class-validat
 
 export class CreateProductsImageDto {
 
-    @IsUrl()
-    @IsString()
+
     @IsNotEmpty()
     image_url: string;
 
